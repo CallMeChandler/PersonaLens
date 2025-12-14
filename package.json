@@ -1,0 +1,31 @@
+{
+  "name": "personalens",
+  "version": "1.0.0",
+  "description": "PersonaLens is a multimodal credibility-signal explorer: - Text: specificity, buzzword density, claim structure, timeline drift - Audio/Video (later): stress-like cues and expression changes (non-diagnostic)",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "npm run dev --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CallMeChandler/PersonaLens.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CallMeChandler/PersonaLens/issues"
+  },
+  "homepage": "https://github.com/CallMeChandler/PersonaLens#readme",
+  "private": "true",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}
