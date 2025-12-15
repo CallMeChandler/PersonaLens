@@ -91,3 +91,56 @@ class TimelineResponse(BaseModel):
     pairwise: Optional[List[TimelinePairwisePoint]] = None
     windows: Optional[List[TimelineWindowPoint]] = None
     error: Optional[str] = None
+
+class ReasonsRequest(BaseModel):
+    texts: List[str] = Field(..., min_length=1)
+    indices: Optional[List[int]] = Field(None, description="Optional: only compute for these indices")
+
+
+class ReasonItem(BaseModel):
+    index: int
+    signals: TextSignalsResponse
+    semanticSimilarityToCentroid: Optional[float] = None
+    semanticOutlier: bool
+    reasonTags: List[str]
+    keywords: List[str]
+
+
+class ReasonsResponse(BaseModel):
+    ok: bool
+    embeddingModel: Optional[str] = None
+    count: Optional[int] = None
+    items: Optional[List[ReasonItem]] = None
+    error: Optional[str] = None
+
+class ClustersRequest(BaseModel):
+    texts: List[str] = Field(..., min_length=2)
+    k: int = Field(3, ge=2, le=12)
+    seed: int = Field(42, description="Random seed for deterministic clustering")
+    max_iter: int = Field(25, ge=5, le=100)
+
+
+class ClusterAssign(BaseModel):
+    index: int
+    clusterId: int
+
+
+class ClusterSummary(BaseModel):
+    clusterId: int
+    size: int
+    label: str
+    representativeIndex: Optional[int] = None
+    representativeText: Optional[str] = None
+    topKeywords: List[str]
+    avgSimilarity: Optional[float] = None
+
+
+class ClustersResponse(BaseModel):
+    ok: bool
+    embeddingModel: Optional[str] = None
+    count: Optional[int] = None
+    k: Optional[int] = None
+    seed: Optional[int] = None
+    items: Optional[List[ClusterAssign]] = None
+    clusters: Optional[List[ClusterSummary]] = None
+    error: Optional[str] = None

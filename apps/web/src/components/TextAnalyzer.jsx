@@ -1,16 +1,18 @@
 ﻿"use client";
 
 import React, { useMemo, useState } from "react";
+import { saveLastRun } from "@/lib/reportVault";
+
 
 const BUZZWORDS = [
-  "synergy","leverage","scalable","disrupt","disruption","ai","ml","deep learning","blockchain",
-  "growth hacking","10x","impact","visionary","thought leader","innovative","cutting-edge",
-  "end-to-end","stakeholder","alignment","strategic","value-add","paradigm","robust","seamless",
-  "world-class","best-in-class","genai","llm","agentic","transformative"
+  "synergy", "leverage", "scalable", "disrupt", "disruption", "ai", "ml", "deep learning", "blockchain",
+  "growth hacking", "10x", "impact", "visionary", "thought leader", "innovative", "cutting-edge",
+  "end-to-end", "stakeholder", "alignment", "strategic", "value-add", "paradigm", "robust", "seamless",
+  "world-class", "best-in-class", "genai", "llm", "agentic", "transformative"
 ];
 
-const HEDGES = ["maybe","probably","possibly","somewhat","kind of","sort of","i think","i guess","perhaps"];
-const ABSOLUTES = ["always","never","guaranteed","everyone","no one","undeniable","proven","certainly","definitely"];
+const HEDGES = ["maybe", "probably", "possibly", "somewhat", "kind of", "sort of", "i think", "i guess", "perhaps"];
+const ABSOLUTES = ["always", "never", "guaranteed", "everyone", "no one", "undeniable", "proven", "certainly", "definitely"];
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || "http://localhost:8000";
 
@@ -145,7 +147,17 @@ export default function TextAnalyzer() {
               </div>
 
               <button
-                onClick={runAnalyze}
+                onClick={() => {
+                  const out = analyzeText(text);
+                  setResult(out);
+
+                  saveLastRun("single", {
+                    meta: { generatedAt: new Date().toISOString() },
+                    input: { text },
+                    output: out,
+                  });
+                }}
+
                 disabled={!canAnalyze || loading}
                 className="inline-flex h-9 items-center justify-center rounded-full border border-white/20 bg-white/10 px-4 text-sm font-semibold text-white transition hover:bg-white/15 disabled:cursor-not-allowed disabled:opacity-50"
               >
@@ -198,7 +210,7 @@ export default function TextAnalyzer() {
             <div className="mt-4">
               <div className="text-xs font-medium text-white/70">Last run (server, frozen)</div>
               <pre className="mt-2 max-h-44 overflow-auto rounded-2xl border border-white/10 bg-black/30 p-3 text-xs text-white/70">
-{JSON.stringify(result ?? { note: "Click Analyze to call the API and freeze a run." }, null, 2)}
+                {JSON.stringify(result ?? { note: "Click Analyze to call the API and freeze a run." }, null, 2)}
               </pre>
             </div>
           </div>

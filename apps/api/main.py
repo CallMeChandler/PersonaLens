@@ -14,6 +14,12 @@ from personalens.analyzers.text_signals import analyze_text_signals
 from personalens.analyzers.text_embeddings import embed_text, embedding_model_name
 from personalens.analyzers.text_drift import analyze_text_drift
 from personalens.analyzers.text_timeline import analyze_text_timeline
+from personalens.schemas import ReasonsRequest, ReasonsResponse
+from personalens.analyzers.text_reasons import analyze_text_reasons
+from personalens.schemas import ClustersRequest, ClustersResponse
+from personalens.analyzers.text_clusters import analyze_text_clusters
+
+
 
 app = FastAPI(title="PersonaLens API", version="0.4.0")
 
@@ -60,3 +66,11 @@ def analyze_drift(req: DriftRequest):
 def analyze_timeline(req: TimelineRequest):
     items = [{"date": it.date, "text": it.text} for it in req.items]
     return analyze_text_timeline(items, window=req.window, stride=req.stride)
+
+@app.post("/analyze/text/reasons", response_model=ReasonsResponse)
+def analyze_reasons(req: ReasonsRequest):
+    return analyze_text_reasons(req.texts, indices=req.indices)
+
+@app.post("/analyze/text/clusters", response_model=ClustersResponse)
+def analyze_clusters(req: ClustersRequest):
+    return analyze_text_clusters(req.texts, k=req.k, seed=req.seed, max_iter=req.max_iter)
