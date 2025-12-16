@@ -6,6 +6,7 @@
     "node": ">=20 <21"
   },
   "scripts": {
+    "postinstall": "npm rebuild lightningcss",
     "dev": "cross-env NEXT_IGNORE_INCORRECT_LOCKFILE=true next dev",
     "build": "cross-env NEXT_IGNORE_INCORRECT_LOCKFILE=true next build",
     "start": "next start",
