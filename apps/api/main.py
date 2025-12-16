@@ -31,10 +31,10 @@ app = FastAPI(title="PersonaLens API", version="0.4.0")
 
 app.add_middleware(
     CORSMiddleware,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_origins=[
         "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "http://192.168.1.2:3000",
+        # add your custom domain later: "https://yourdomain.com",
     ],
     allow_methods=["*"],
     allow_headers=["*"],
@@ -135,3 +135,4 @@ async def analyze_video_shift_route(
             os.unlink(tmp.name)
         except Exception:
             pass
+
