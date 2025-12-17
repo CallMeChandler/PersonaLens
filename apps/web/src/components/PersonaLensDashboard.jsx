@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState, useEffect } from "react"; // Add useEffect
+import React, { useMemo, useState, useEffect } from "react";
 import TextAnalyzer from "@/components/TextAnalyzer";
 import DriftAnalyzer from "@/components/DriftAnalyzer";
 import TimelineAnalyzer from "@/components/TimelineAnalyzer";
@@ -121,9 +121,8 @@ export default function PersonaLensDashboard() {
   const [tab, setTab] = useState("single");
   const [isLoading, setIsLoading] = useState(false);
   const [activeGlow, setActiveGlow] = useState({ x: 0, y: 0 });
-  const [availableCount, setAvailableCount] = useState(0); // Initialize with 0
+  const [availableCount, setAvailableCount] = useState(0);
 
-  // FIX: Use useEffect to run client-side only code
   useEffect(() => {
     const allRuns = loadAllLastRuns();
     setAvailableCount(countAvailableRuns(allRuns));
@@ -171,11 +170,11 @@ export default function PersonaLensDashboard() {
 
   return (
     <main
-      className="min-h-screen bg-[#0A0F1F] text-white overflow-x-hidden"
+      className="min-h-screen bg-[#0A0F1F] text-white overflow-x-hidden w-full relative"
       onMouseMove={handleMouseMove}
     >
       {/* Animated Background */}
-      <div className="fixed inset-0 -z-10 overflow-hidden">
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-br from-[#0A0F1F] via-[#0F1525] to-[#0A0F1F]" />
 
         {/* Animated gradient orbs */}
@@ -200,45 +199,46 @@ export default function PersonaLensDashboard() {
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tl from-purple-500/10 to-transparent blur-3xl" />
       </div>
 
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
+      <div className="container mx-auto px-4 py-8 max-w-7xl w-full">
         {/* Enhanced Header */}
         <div className="mb-8">
-          <div className="relative overflow-hidden rounded-2xl border border-white/[0.1] bg-gradient-to-br from-white/[0.05] to-white/[0.02] p-8 backdrop-blur-xl shadow-2xl">
+          <div className="relative overflow-hidden rounded-2xl border border-white/[0.1] bg-gradient-to-br from-white/[0.05] to-white/[0.02] p-6 md:p-8 backdrop-blur-xl shadow-2xl">
             {/* Header glow effect */}
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
 
             <div className="relative">
+              {/* Changed lg:flex-row to flex-wrap to prevent overflow on intermediate screens */}
               <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-                <div className="flex items-start gap-4">
+                <div className="flex items-start gap-4 flex-1 min-w-0">
                   {/* Logo with glow */}
-                  <div className="relative">
+                  <div className="relative flex-shrink-0">
                     <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl blur-xl opacity-30" />
                     <div className="relative p-3 rounded-2xl bg-gradient-to-br from-gray-900 to-black border border-white/[0.1]">
                       <img
                         src="/personaLensLogo.png"
                         alt="PersonaLens logo"
-                        className="h-16 w-16 md:h-20 md:w-20 object-contain"
+                        className="h-12 w-12 md:h-20 md:w-20 object-contain"
                       />
                     </div>
                   </div>
 
-                  <div>
-                    <div className="flex items-center gap-3 mb-2">
-                      <h1 className="text-3xl font-bold bg-gradient-to-r from-white via-cyan-100 to-white bg-clip-text text-transparent">
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-3 mb-2">
+                      <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-white via-cyan-100 to-white bg-clip-text text-transparent truncate">
                         PersonaLens
                       </h1>
-                      <span className="px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-300 border border-cyan-500/30">
+                      <span className="px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-300 border border-cyan-500/30 whitespace-nowrap">
                         v1.0
                       </span>
                     </div>
-                    <p className="text-white/70 text-lg max-w-2xl">
+                    <p className="text-white/70 text-sm md:text-lg max-w-2xl break-words">
                       Advanced multimodal consistency analysis for detecting baseline-relative behavioral shifts
                     </p>
                   </div>
                 </div>
 
                 {/* CTA Section */}
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-4 w-full lg:w-auto">
                   <button
                     onClick={downloadFullReport}
                     disabled={isLoading}
@@ -249,6 +249,7 @@ export default function PersonaLensDashboard() {
                       "text-white font-semibold text-sm",
                       "transition-all duration-300 hover:shadow-[0_0_40px_-12px_rgba(0,198,255,0.8)]",
                       "disabled:opacity-50 disabled:cursor-not-allowed",
+                      "w-full lg:w-auto" // Full width on mobile
                     ].join(" ")}
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-white/20 to-cyan-500/0 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
@@ -260,15 +261,15 @@ export default function PersonaLensDashboard() {
                     ) : (
                       <>
                         <Download size={18} />
-                        <span>Export Full Report</span>
+                        <span className="whitespace-nowrap">Export Full Report</span>
                         <Sparkles size={16} className="ml-1 opacity-60" />
                       </>
                     )}
                   </button>
 
-                  <div className="flex items-center gap-2 text-xs text-white/50">
-                    <AlertCircle size={12} />
-                    <span>Outputs are exploratory signals only — not for diagnostic use</span>
+                  <div className="flex items-center gap-2 text-xs text-white/50 justify-center lg:justify-end">
+                    <AlertCircle size={12} className="flex-shrink-0" />
+                    <span className="truncate">Outputs are exploratory signals only</span>
                   </div>
                 </div>
               </div>
@@ -293,7 +294,7 @@ export default function PersonaLensDashboard() {
                   <Database size={14} />
                   Analysis Modules
                 </h3>
-                <div className="space-y-2">
+                <div className="grid grid-cols-2 lg:grid-cols-1 gap-2">
                   {tabs.map((tabItem) => (
                     <button
                       key={tabItem.id}
@@ -305,10 +306,10 @@ export default function PersonaLensDashboard() {
                           : "text-white/60 hover:text-white hover:bg-white/[0.05]"
                       ].join(" ")}
                     >
-                      <tabItem.icon size={18} />
-                      <span>{tabItem.label}</span>
+                      <tabItem.icon size={18} className="flex-shrink-0" />
+                      <span className="truncate">{tabItem.label}</span>
                       {tab === tabItem.id && (
-                        <div className="ml-auto w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
+                        <div className="ml-auto w-2 h-2 rounded-full bg-cyan-500 animate-pulse hidden lg:block" />
                       )}
                     </button>
                   ))}
@@ -316,7 +317,7 @@ export default function PersonaLensDashboard() {
               </div>
 
               {/* Quick Insights */}
-              <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
+              <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4 hidden lg:block">
                 <h4 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
                   <Zap size={14} />
                   Quick Insights
@@ -340,10 +341,10 @@ export default function PersonaLensDashboard() {
             </div>
           </div>
 
-          {/* Main Panel */}
-          <div className="flex-1">
+          {/* Main Panel - Added min-w-0 to fix overflow */}
+          <div className="flex-1 min-w-0">
             {/* Enhanced Tab Navigation */}
-            <div className="mb-6">
+            <div className="mb-6 lg:hidden">
               <div className="flex overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent">
                 <div className="flex gap-3 min-w-max">
                   {tabs.map((tabItem) => (
@@ -367,7 +368,7 @@ export default function PersonaLensDashboard() {
                 {/* Content Header Glow */}
                 <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent" />
 
-                <div className="p-6 md:p-8">
+                <div className="p-4 md:p-8 overflow-x-auto">
                   {tab === "single" && <TextAnalyzer />}
                   {tab === "drift" && <DriftAnalyzer />}
                   {tab === "timeline" && <TimelineAnalyzer />}
@@ -412,9 +413,10 @@ export default function PersonaLensDashboard() {
         <footer className="mt-12 pt-6 border-t border-white/[0.08]">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="text-sm text-white/50 text-center md:text-left">
-              <p className="flex items-center justify-center md:justify-start gap-2">
-                <Shield size={14} />
-                PersonaLens is designed for exploratory analysis only. Not for diagnostic, medical, or deception detection purposes.
+              <p className="flex flex-col md:flex-row items-center justify-center md:justify-start gap-2">
+                <span className="flex items-center gap-1"><Shield size={14} /> PersonaLens is designed for exploratory analysis only.</span>
+                <span className="hidden md:inline">•</span>
+                <span>Not for diagnostic, medical, or deception detection purposes.</span>
               </p>
               <p className="mt-2 text-white/40">
                 © {new Date().getFullYear()} PersonaLens v1.0 • Advanced Behavioral Analytics
