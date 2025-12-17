@@ -27,7 +27,7 @@ from personalens.analyzers.video_shift import analyze_video_shift
 
 
 
-app = FastAPI(title="PersonaLens API", version="0.4.0")
+app = FastAPI(title="PersonaLens API", version="0.4.0", redirect_slashes=False)
 
 from fastapi.middleware.cors import CORSMiddleware
 
