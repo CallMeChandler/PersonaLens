@@ -29,16 +29,20 @@ from personalens.analyzers.video_shift import analyze_video_shift
 
 app = FastAPI(title="PersonaLens API", version="0.4.0")
 
+from fastapi.middleware.cors import CORSMiddleware
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_origins=[
+        "https://persona-lens-v1.vercel.app",
         "http://localhost:3000",
-        # add your custom domain later: "https://yourdomain.com",
     ],
+    allow_origin_regex=r"https://.*\.vercel\.app",
+    allow_credentials=True,      # set True only if you use cookies/auth
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 
 @app.get("/health")
